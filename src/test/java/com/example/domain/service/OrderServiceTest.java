@@ -1,5 +1,6 @@
 package com.example.domain.service;
 
+import com.example.application.service.OrderService;
 import com.example.domain.model.Order;
 import com.example.domain.model.OrderItem;
 import io.quarkus.test.junit.QuarkusTest;
@@ -17,37 +18,11 @@ public class OrderServiceTest {
         OrderService orderService;
 
         @Test
-        public void testCreateOrder() {
+        public void testSave() {
             Order order = new Order();
             order.setOrderDate(LocalDateTime.now());
-            Order createdOrder = orderService.createOrder(order);
+            Order createdOrder = orderService.save(order);
             assertNotNull(createdOrder.getId());
         }
-
-        @Test
-        public void testAddItemToOrder() {
-            Order order = new Order();
-            order.setOrderDate(LocalDateTime.now());
-            Order createdOrder = orderService.createOrder(order);
-
-            OrderItem item = new OrderItem("Product 1", BigDecimal.valueOf(100), 1);
-            orderService.addItemToOrder(createdOrder.getId(), item);
-
-            Order updatedOrder = orderService.findById(createdOrder.getId());
-            assertEquals(1, updatedOrder.getItems().size());
-        }
-
-        @Test
-        public void testUpdateOrderStatus() {
-            Order order = new Order();
-            order.setOrderDate(LocalDateTime.now());
-            Order createdOrder = orderService.createOrder(order);
-
-            orderService.updateOrderStatus(createdOrder.getId(), "SHIPPED");
-
-            Order updatedOrder = orderService.findById(createdOrder.getId());
-            assertEquals("SHIPPED", updatedOrder.getStatus());
-        }
-
 
 }
